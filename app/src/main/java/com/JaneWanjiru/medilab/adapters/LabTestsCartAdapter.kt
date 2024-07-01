@@ -47,7 +47,7 @@ class LabTestsCartAdapter(var context: Context):RecyclerView.Adapter<LabTestsCar
 //to do later ,to remove an item from cart
 
         }
-        Toast.makeText(context, "Total cost is ${item.test_cost}", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(context, "Total cost is ${item.test_cost}", Toast.LENGTH_SHORT).show()
 
 
     }

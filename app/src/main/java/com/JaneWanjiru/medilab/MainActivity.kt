@@ -1,10 +1,12 @@
 package com.JaneWanjiru.medilab
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
@@ -18,7 +20,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.JaneWanjiru.medilab.adapters.LabAdapter
 import com.JaneWanjiru.medilab.constants.Constants
 import com.JaneWanjiru.medilab.helpers.ApiHelper
+import com.JaneWanjiru.medilab.helpers.PrefsHelper
 import com.JaneWanjiru.medilab.models.Lab
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.textview.MaterialTextView
 import com.google.gson.GsonBuilder
 import org.json.JSONArray
 import org.json.JSONObject
@@ -32,6 +37,55 @@ class MainActivity : AppCompatActivity() {
     lateinit var itemList: List<Lab>
     lateinit var swiper:SwipeRefreshLayout
 
+//    function to uppdate
+fun update(){
+//    fetch the text view and 3 btn
+    val user=findViewById<MaterialTextView>(R.id.user1)
+
+    val signin= findViewById<MaterialButton>(R.id.signin1)
+    val signout= findViewById<MaterialButton>(R.id.signout1)
+    val profile= findViewById<MaterialButton>(R.id.profile1)
+
+    signin.visibility = View.GONE
+    signout.visibility = View.GONE
+    profile.visibility = View.GONE
+
+    val token= PrefsHelper.getPrefs(applicationContext,"access_token")
+//    check if token is empty
+    if( token.isEmpty()){
+//        NOT LOGGED IN
+        user.text="Not Logged In"
+        signin.visibility=View.VISIBLE
+        signin.setOnClickListener {
+            val intent = Intent(applicationContext,SignInActivity::class.java)
+            startActivity(intent)
+
+        }
+    }else{
+//        logged in
+        profile.visibility=View.VISIBLE
+        profile.setOnClickListener {
+//            intent to go to profile activity
+
+        }
+
+        signout.visibility=View.VISIBLE
+//        get surname from  shared prefs
+        val surname=PrefsHelper.getPrefs(applicationContext,"surname")
+        user.text="Welcome $surname"
+
+//        signout the user
+        signout.setOnClickListener {
+            PrefsHelper.clearPrefs(applicationContext)
+            startActivity(intent)
+            finishAffinity()
+
+        }
+
+    }
+
+}
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -41,6 +95,7 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        update()
 //        fetch recycler view
          recycler = findViewById(R.id.recyclerview)
          progress = findViewById(R.id.progress)

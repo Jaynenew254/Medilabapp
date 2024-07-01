@@ -107,7 +107,7 @@ fun clearCartById(test_id:String){
 //    provide the testing we are deleting
     db.delete("cart","test_id=?", arrayOf(test_id))
     println("Item ID $test_id Removed")
-    Toast.makeText(context, "Item Id $test_id Removed", Toast.LENGTH_SHORT).show()
+//    Toast.makeText(context, "Item Id $test_id Removed", Toast.LENGTH_SHORT).show()
 } //end of delete by id
 
     //function to get the total cost of cart items
@@ -124,7 +124,7 @@ while (result.moveToNext()){
     total = total+result.getDouble(0)
 }//END OF WHILE LOOP
 //        return the updated total
-        Toast.makeText(context, "The total cost is $total", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(context, "The total cost is $total", Toast.LENGTH_SHORT).show()
 return total
 
     }

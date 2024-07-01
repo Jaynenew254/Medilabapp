@@ -1,5 +1,6 @@
 package com.JaneWanjiru.medilab
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -10,6 +11,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.JaneWanjiru.medilab.adapters.LabTestsCartAdapter
+import com.JaneWanjiru.medilab.helpers.PrefsHelper
 import com.JaneWanjiru.medilab.helpers.SQLiteCartHelper
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textview.MaterialTextView
@@ -28,6 +30,26 @@ class MyCart : AppCompatActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.recycler)
         val total = findViewById<MaterialTextView>(R.id.total)
         val btn = findViewById<MaterialButton>(R.id.checkout)
+        btn.setOnClickListener {
+//            using prefs check if token exists
+            val token = PrefsHelper.getPrefs(applicationContext,"access_token")
+//            Toast.makeText(applicationContext, "$token", Toast.LENGTH_SHORT).show()
+            if(token.isEmpty()){
+//                token does not exist...means not log in
+                Toast.makeText(applicationContext, "Not logged in", Toast.LENGTH_SHORT).show()
+                val intent = Intent(applicationContext,SignInActivity::class.java)
+                startActivity(intent)
+                finish()
+
+            }else{
+//                token exist...meaning ur logged in and can proceed to check out step one
+                Toast.makeText(applicationContext, "Logged In", Toast.LENGTH_SHORT).show()
+
+
+
+            }
+
+        }
 
 //        put total cost in a text view
         val helper = SQLiteCartHelper(applicationContext)
@@ -38,9 +60,9 @@ class MyCart : AppCompatActivity() {
 //        get total from the helper
         total.text = "Total Cost: " + helper.totalCost()
 //        if totalcost is ZERO and our cart is empty hide the check out btn
-        if (helper.totalCost() == 0.0) {
-            btn.visibility = View.GONE
-        }//END OF IF
+//        if (helper.totalCost() == 0.0) {
+//            btn.visibility = View.GONE
+//        }//END OF IF
 
 //        set ur layout
         val layoutManager = LinearLayoutManager(applicationContext)
